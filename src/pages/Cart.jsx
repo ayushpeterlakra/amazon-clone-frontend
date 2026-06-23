@@ -18,7 +18,7 @@ function Cart({ cart, onIncrease, onDecrease }) {
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {cart.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             style={{
               display: "flex",
               alignItems: "center",
@@ -38,9 +38,9 @@ function Cart({ cart, onIncrease, onDecrease }) {
               <h3 style={{ margin: "0 0 8px 0" }}>{item.name}</h3>
               <p style={{ margin: "0 0 8px 0" }}>₹{item.price} each</p>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <button onClick={() => onDecrease(item.id)}>-</button>
+                <button onClick={() => onDecrease(item._id)}>-</button>
                 <span>{item.quantity}</span>
-                <button onClick={() => onIncrease(item.id)}>+</button>
+                <button onClick={() => onIncrease(item._id)}>+</button>
               </div>
             </div>
             <p style={{ fontWeight: "bold" }}>

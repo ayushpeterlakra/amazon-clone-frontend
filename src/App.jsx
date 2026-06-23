@@ -10,12 +10,12 @@ function App() {
 
   function handleAddToCart(product) {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
+      const existingItem = prevCart.find((item) => item._id === product._id);
 
       if (existingItem) {
         // Already in cart — increase its quantity by 1
         return prevCart.map((item) =>
-          item.id === product.id
+          item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -29,7 +29,7 @@ function App() {
   function handleIncrease(productId) {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+        item._id === productId ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   }
@@ -38,7 +38,7 @@ function App() {
     setCart((prevCart) =>
       prevCart
         .map((item) =>
-          item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+          item._id === productId ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0) // remove if it hits 0
     );
@@ -65,7 +65,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home cart={cart} onAddToCart={handleAddToCart} />}
+          element={<Home onAddToCart={handleAddToCart} />}
         />
         <Route
           path="/cart"

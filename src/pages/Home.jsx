@@ -1,8 +1,17 @@
 // src/pages/Home.jsx
-import { products } from "../products";
+import { useState, useEffect } from "react";
 import ProductCard from "../ProductCard";
 
-function Home({ cart, onAddToCart }) {
+function Home({ onAddToCart }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.log("Error fetching products:", err));
+  }, []);
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Amazon Clone</h1>
@@ -13,7 +22,7 @@ function Home({ cart, onAddToCart }) {
       }}>
         {products.map((product) => (
           <ProductCard
-            key={product.id}
+            key={product._id}
             product={product}
             onAddToCart={onAddToCart}
           />
