@@ -3,24 +3,36 @@ import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 import "./App.css";
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  function handleLogin(newToken, newUser) {
+    setToken(newToken);
+    setUser(newUser);
+  }
+
+  function handleLogout() {
+    setToken(null);
+    setUser(null);
+  }
 
   function handleAddToCart(product) {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item._id === product._id);
 
       if (existingItem) {
-        // Already in cart — increase its quantity by 1
         return prevCart.map((item) =>
           item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // New item — add it with quantity 1
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
@@ -40,7 +52,7 @@ function App() {
         .map((item) =>
           item._id === productId ? { ...item, quantity: item.quantity - 1 } : item
         )
-        .filter((item) => item.quantity > 0) // remove if it hits 0
+        .filter((item) => item.quantity > 0)
     );
   }
 
@@ -51,22 +63,32 @@ function App() {
       <nav style={{
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "center",
         padding: "16px 20px",
         borderBottom: "1px solid #ddd"
       }}>
         <Link to="/" style={{ fontWeight: "bold", fontSize: "18px" }}>
           Amazon Clone
         </Link>
-        <Link to="/cart">
-          🛒 Cart ({totalItems})
-        </Link>
+
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          {user ? (
+            <>
+              <span>Hi, {user.name}</span>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/signup">Sign Up</Link>
+              <Link to="/login">Login</Link>
+            </>
+          )}
+          <Link to="/cart">🛒 Cart ({totalItems})</Link>
+        </div>
       </nav>
 
       <Routes>
-        <Route
-          path="/"
-          element={<Home onAddToCart={handleAddToCart} />}
-        />
+        <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
         <Route
           path="/cart"
           element={
@@ -77,6 +99,8 @@ function App() {
             />
           }
         />
+        <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
       </Routes>
     </div>
   );
