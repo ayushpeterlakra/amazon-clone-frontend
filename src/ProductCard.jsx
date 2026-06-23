@@ -1,6 +1,6 @@
 // src/ProductCard.jsx
 
-function ProductCard({ product }) {
+function ProductCard({ product, onAddToCart }) {
   return (
     <div style={{
       border: "1px solid #ddd",
@@ -16,7 +16,7 @@ function ProductCard({ product }) {
       />
       <h3 style={{ fontSize: "16px" }}>{product.name}</h3>
       <p style={{ fontWeight: "bold" }}>₹{product.price}</p>
-      <button>Add to Cart</button>
+      <button onClick={() => onAddToCart(product)}>Add to Cart</button>
     </div>
   );
 }
