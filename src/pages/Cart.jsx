@@ -1,4 +1,5 @@
 // src/pages/Cart.jsx
+import { Link } from "react-router-dom";
 
 function Cart({ cart, onIncrease, onDecrease }) {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -50,6 +51,9 @@ function Cart({ cart, onIncrease, onDecrease }) {
         ))}
       </div>
       <h2 style={{ marginTop: "20px" }}>Total: ₹{total}</h2>
+      <Link to="/checkout">
+        <button style={{ marginTop: "10px" }}>Proceed to Checkout</button>
+      </Link>
     </div>
   );
 }

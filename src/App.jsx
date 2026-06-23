@@ -5,21 +5,30 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Checkout from "./pages/Checkout";
 import "./App.css";
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
 
   function handleLogin(newToken, newUser) {
     setToken(newToken);
     setUser(newUser);
+    localStorage.setItem("token", newToken);
+    localStorage.setItem("user", JSON.stringify(newUser));
   }
 
   function handleLogout() {
     setToken(null);
     setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 
   function handleAddToCart(product) {
@@ -101,6 +110,7 @@ function App() {
         />
         <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/checkout" element={<Checkout cart={cart} />} />
       </Routes>
     </div>
   );
