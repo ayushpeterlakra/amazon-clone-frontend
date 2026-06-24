@@ -11,6 +11,7 @@ import "./App.css";
 function App() {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -77,9 +78,29 @@ function App() {
   return (
     <div>
       <nav className="navbar">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={() => setSearchQuery("")}>
           Amazon<span>Clone</span>
         </Link>
+
+        {user && (
+          <div className="navbar-search">
+            <div className="search-category">
+              All <span>▼</span>
+            </div>
+            <input
+              type="text"
+              placeholder="Search Amazon..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <button className="search-btn">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </div>
+        )}
 
         <div className="navbar-links">
           {user ? (
@@ -100,7 +121,7 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={user ? <Home onAddToCart={handleAddToCart} /> : <Navigate to="/login" />} />
+        <Route path="/" element={user ? <Home onAddToCart={handleAddToCart} searchQuery={searchQuery} /> : <Navigate to="/login" />} />
         <Route
           path="/cart"
           element={
