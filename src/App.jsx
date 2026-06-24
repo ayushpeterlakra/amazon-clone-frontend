@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
@@ -28,9 +28,14 @@ function App() {
   function handleLogout() {
     setToken(null);
     setUser(null);
+    setCart([]);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
+  }
+
+  function handleClearCart() {
+    setCart([]);
   }
 
   function handleAddToCart(product) {
@@ -95,20 +100,33 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
+        <Route path="/" element={user ? <Home onAddToCart={handleAddToCart} /> : <Navigate to="/login" />} />
         <Route
           path="/cart"
           element={
-            <Cart
-              cart={cart}
-              onIncrease={handleIncrease}
-              onDecrease={handleDecrease}
-            />
+            user ? (
+              <Cart
+                cart={cart}
+                onIncrease={handleIncrease}
+                onDecrease={handleDecrease}
+              />
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/checkout" element={<Checkout cart={cart} />} />
+        <Route
+          path="/checkout"
+          element={
+            user ? (
+              <Checkout cart={cart} onClearCart={handleClearCart} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
       </Routes>
     </div>
   );
