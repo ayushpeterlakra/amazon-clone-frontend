@@ -38,4 +38,10 @@ export const products = [
     price: 1299,
     image: "https://placehold.co/300x300?text=Backpack",
   },
+  {
+    id: 7,
+    name: "GTA 6",
+    price: 4999,
+    image: "/src/assets/gta6.png",
+  },
 ];

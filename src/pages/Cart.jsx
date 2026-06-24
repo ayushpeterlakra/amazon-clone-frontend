@@ -6,54 +6,62 @@ function Cart({ cart, onIncrease, onDecrease }) {
 
   if (cart.length === 0) {
     return (
-      <div style={{ padding: "20px" }}>
-        <h1>Your Cart</h1>
-        <p>Your cart is empty.</p>
+      <div className="page">
+        <div className="empty-state">
+          <div className="empty-icon">🛒</div>
+          <h2>Your cart is empty</h2>
+          <p>Add a few products and they'll show up here.</p>
+          <Link to="/" className="btn-primary">Continue shopping</Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Your Cart</h1>
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {cart.map((item) => (
-          <div
-            key={item._id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "16px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "12px",
-              maxWidth: "500px"
-            }}
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              style={{ width: "80px", height: "80px", objectFit: "cover" }}
-            />
-            <div style={{ flex: 1 }}>
-              <h3 style={{ margin: "0 0 8px 0" }}>{item.name}</h3>
-              <p style={{ margin: "0 0 8px 0" }}>₹{item.price} each</p>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <button onClick={() => onDecrease(item._id)}>-</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => onIncrease(item._id)}>+</button>
+    <div className="page">
+      <p className="page-eyebrow">Cart</p>
+      <h1 className="page-title">Your items</h1>
+      <p className="page-subtitle">Review your picks before checking out.</p>
+
+      <div className="cart-layout">
+        <div className="cart-items">
+          {cart.map((item) => (
+            <div key={item._id} className="cart-item">
+              <div className="image-frame">
+                <img src={item.image} alt={item.name} />
               </div>
+
+              <div className="cart-item-info">
+                <h3>{item.name}</h3>
+                <p className="unit-price">₹{item.price} each</p>
+                <div className="qty-stepper">
+                  <button onClick={() => onDecrease(item._id)} aria-label="Decrease quantity">−</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => onIncrease(item._id)} aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+
+              <p className="cart-item-total">₹{item.price * item.quantity}</p>
             </div>
-            <p style={{ fontWeight: "bold" }}>
-              ₹{item.price * item.quantity}
-            </p>
+          ))}
+        </div>
+
+        <div className="summary-panel">
+          <h2>Order summary</h2>
+          <div className="summary-line">
+            <span>Items</span>
+            <span>{cart.reduce((sum, i) => sum + i.quantity, 0)}</span>
           </div>
-        ))}
+          <hr className="summary-divider" />
+          <div className="summary-total">
+            <span>Total</span>
+            <span className="amount">₹{total}</span>
+          </div>
+          <Link to="/checkout" className="btn-primary" style={{ display: "block", textAlign: "center" }}>
+            Proceed to checkout
+          </Link>
+        </div>
       </div>
-      <h2 style={{ marginTop: "20px" }}>Total: ₹{total}</h2>
-      <Link to="/checkout">
-        <button style={{ marginTop: "10px" }}>Proceed to Checkout</button>
-      </Link>
     </div>
   );
 }

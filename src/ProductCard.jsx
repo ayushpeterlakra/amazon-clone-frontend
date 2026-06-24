@@ -2,21 +2,17 @@
 
 function ProductCard({ product, onAddToCart }) {
   return (
-    <div style={{
-      border: "1px solid #ddd",
-      borderRadius: "8px",
-      padding: "16px",
-      width: "220px",
-      textAlign: "center"
-    }}>
-      <img
-        src={product.image}
-        alt={product.name}
-        style={{ width: "100%", height: "180px", objectFit: "cover" }}
-      />
-      <h3 style={{ fontSize: "16px" }}>{product.name}</h3>
-      <p style={{ fontWeight: "bold" }}>₹{product.price}</p>
-      <button onClick={() => onAddToCart(product)}>Add to Cart</button>
+    <div className="product-card">
+      <div className="image-frame">
+        <img src={product.image} alt={product.name} />
+      </div>
+      <h3>{product.name}</h3>
+      <p className="price">
+        <span className="symbol">₹</span>{product.price}
+      </p>
+      <button className="btn-primary" onClick={() => onAddToCart(product)}>
+        Add to Cart
+      </button>
     </div>
   );
 }

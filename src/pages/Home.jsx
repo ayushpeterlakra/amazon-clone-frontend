@@ -13,13 +13,13 @@ function Home({ onAddToCart }) {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Amazon Clone</h1>
-      <div style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "16px"
-      }}>
+    <div className="page">
+      <p className="page-eyebrow">Featured</p>
+      <h1 className="page-title">Shop the latest tech</h1>
+      <p className="page-subtitle">
+        Curated picks across phones and audio, shipped fast.
+      </p>
+      <div className="product-grid">
         {products.map((product) => (
           <ProductCard
             key={product._id}

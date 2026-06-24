@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout";
 import "./App.css";
 
 function App() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]);
 
   const [user, setUser] = useState(() => {
@@ -29,6 +30,7 @@ function App() {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    navigate("/login");
   }
 
   function handleAddToCart(product) {
@@ -69,21 +71,15 @@ function App() {
 
   return (
     <div>
-      <nav style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "16px 20px",
-        borderBottom: "1px solid #ddd"
-      }}>
-        <Link to="/" style={{ fontWeight: "bold", fontSize: "18px" }}>
-          Amazon Clone
+      <nav className="navbar">
+        <Link to="/" className="navbar-logo">
+          Amazon<span>Clone</span>
         </Link>
 
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+        <div className="navbar-links">
           {user ? (
             <>
-              <span>Hi, {user.name}</span>
+              <span className="navbar-greeting">Hi, {user.name}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
@@ -92,7 +88,9 @@ function App() {
               <Link to="/login">Login</Link>
             </>
           )}
-          <Link to="/cart">🛒 Cart ({totalItems})</Link>
+          <Link to="/cart" className="navbar-cart">
+            🛒 Cart ({totalItems})
+          </Link>
         </div>
       </nav>
 
