@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState } from "react";
 import { Routes, Route, Link, useNavigate, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
@@ -6,6 +5,7 @@ import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Checkout from "./pages/Checkout";
+import Footer from "./Footer";
 import "./App.css";
 
 function App() {
@@ -128,6 +128,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </div>
   );
 }
