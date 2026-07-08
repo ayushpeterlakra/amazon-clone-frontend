@@ -37,7 +37,7 @@ function Signup({ onLogin }) {
   return (
     <div className="auth-shell">
       <div className="auth-panel">
-        <p className="auth-panel-eyebrow">Amazon Clone</p>
+        <p className="auth-panel-eyebrow">NovaBuy</p>
         <h1>Create your account and start shopping smarter.</h1>
         <p>
           Track orders, save your cart across visits, and check out faster

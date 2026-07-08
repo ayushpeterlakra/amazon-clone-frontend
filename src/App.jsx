@@ -1,17 +1,18 @@
+// src/App.jsx
 import { useState } from "react";
-import { Routes, Route, Link, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Checkout from "./pages/Checkout";
-import Footer from "./Footer";
 import "./App.css";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [cart, setCart] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
@@ -29,14 +30,9 @@ function App() {
   function handleLogout() {
     setToken(null);
     setUser(null);
-    setCart([]);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
-  }
-
-  function handleClearCart() {
-    setCart([]);
   }
 
   function handleAddToCart(product) {
@@ -73,83 +69,115 @@ function App() {
     );
   }
 
+  function handleOrderComplete() {
+    setCart([]);
+  }
+
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div>
       <nav className="navbar">
-        <Link to="/" className="navbar-logo" onClick={() => setSearchQuery("")}>
-          Amazon<span>Clone</span>
-        </Link>
-
-        {user && (
-          <div className="navbar-search">
-            <div className="search-category">
-              All <span>▼</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Search Amazon..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <button className="search-btn">
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-            </button>
-          </div>
-        )}
-
-        <div className="navbar-links">
-          {user ? (
-            <>
-              <span className="navbar-greeting">Hi, {user.name}</span>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/signup">Sign Up</Link>
-              <Link to="/login">Login</Link>
-            </>
-          )}
-          <Link to="/cart" className="navbar-cart">
-            🛒 Cart ({totalItems})
+        <div className="navbar-row-top">
+          <Link to="/" className="navbar-logo">
+            Nova<span>Buy</span>
           </Link>
+
+          {isHome && (
+            <div className="navbar-search">
+              <select defaultValue="all">
+                <option value="all">All</option>
+                <option value="mobiles">Mobiles</option>
+                <option value="electronics">Electronics</option>
+              </select>
+              <input type="text" placeholder="Search NovaBuy..." />
+              <button aria-label="Search">🔍</button>
+            </div>
+          )}
+
+          {isHome && (
+            <div className="navbar-categories">
+              <a href="#">Deals</a>
+              <a href="#">Mobiles</a>
+              <a href="#">Electronics</a>
+              <a href="#">Service</a>
+            </div>
+          )}
+
+          <div className="navbar-links">
+            {user ? (
+              <>
+                <span className="navbar-greeting">Hi, {user.name}</span>
+                <button onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <>
+                {location.pathname !== "/signup" && <Link to="/signup">Sign Up</Link>}
+                {location.pathname !== "/login" && <Link to="/login">Login</Link>}
+              </>
+            )}
+            {isHome && (
+              <Link to="/cart" className="navbar-cart">
+                🛒 Cart ({totalItems})
+              </Link>
+            )}
+          </div>
         </div>
       </nav>
 
       <Routes>
-        <Route path="/" element={user ? <Home onAddToCart={handleAddToCart} searchQuery={searchQuery} /> : <Navigate to="/login" />} />
+        <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
         <Route
           path="/cart"
           element={
-            user ? (
-              <Cart
-                cart={cart}
-                onIncrease={handleIncrease}
-                onDecrease={handleDecrease}
-              />
-            ) : (
-              <Navigate to="/login" />
-            )
+            <Cart
+              cart={cart}
+              onIncrease={handleIncrease}
+              onDecrease={handleDecrease}
+            />
           }
         />
         <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route
-          path="/checkout"
-          element={
-            user ? (
-              <Checkout cart={cart} onClearCart={handleClearCart} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        <Route path="/checkout" element={<Checkout cart={cart} onOrderComplete={handleOrderComplete} />} />
       </Routes>
-      <Footer />
+
+      <footer className="site-footer">
+        <div className="footer-grid">
+          <div className="footer-col">
+            <h4>Get to Know Us</h4>
+            <a href="#">About NovaBuy</a>
+            <a href="#">Careers</a>
+            <a href="#">Press Releases</a>
+            <a href="#">NovaBuy Labs</a>
+          </div>
+          <div className="footer-col">
+            <h4>Connect with Us</h4>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+          </div>
+          <div className="footer-col">
+            <h4>Make Money with Us</h4>
+            <a href="#">Sell on NovaBuy</a>
+            <a href="#">Protect Your Brand</a>
+            <a href="#">Become an Affiliate</a>
+            <a href="#">Advertise Your Products</a>
+          </div>
+          <div className="footer-col">
+            <h4>Let Us Help You</h4>
+            <a href="#">Your Account</a>
+            <a href="#">Returns Centre</a>
+            <a href="#">Help</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>NovaBuy</span>
+          <span>© 2026 NovaBuy. All rights reserved. Built for professional retail experiences.</span>
+        </div>
+      </footer>
     </div>
   );
 }

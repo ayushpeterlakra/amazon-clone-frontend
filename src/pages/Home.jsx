@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import ProductCard from "../ProductCard";
 
-function Home({ onAddToCart, searchQuery = "" }) {
+function Home({ onAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -12,27 +12,30 @@ function Home({ onAddToCart, searchQuery = "" }) {
       .catch((err) => console.log("Error fetching products:", err));
   }, []);
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
-    <div className="page">
-      <p className="page-eyebrow">Featured</p>
-      <h1 className="page-title">Shop the latest tech</h1>
-      <p className="page-subtitle">
-        {searchQuery ? `Search results for "${searchQuery}"` : "Curated picks across phones and audio, shipped fast."}
-      </p>
-      
-      {filteredProducts.length === 0 ? (
-        <div className="empty-state" style={{ padding: "60px 20px" }}>
-          <div className="empty-icon">🔍</div>
-          <h2>No products found</h2>
-          <p>We couldn't find any products matching "{searchQuery}". Try a different keyword!</p>
+    <div>
+      <section className="hero-section">
+        <p className="hero-eyebrow">Featured Collection</p>
+        <h1 className="hero-title">
+          Shop the <em>latest</em> tech innovations
+        </h1>
+        <p className="hero-subtitle">
+          NovaBuy curates flagship phones and studio audio. Experience
+          the pinnacle of performance with lightning-fast shipping.
+        </p>
+        <div className="hero-ctas">
+          <button className="btn-primary">Explore Deals</button>
+          <button className="btn-secondary">Learn More</button>
         </div>
-      ) : (
+      </section>
+
+      <div className="page">
+        <div className="section-header">
+          <h2>Trending Products</h2>
+          <a href="#">View all categories →</a>
+        </div>
         <div className="product-grid">
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard
               key={product._id}
               product={product}
@@ -40,7 +43,7 @@ function Home({ onAddToCart, searchQuery = "" }) {
             />
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }

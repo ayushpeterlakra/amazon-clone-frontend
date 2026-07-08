@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Checkout({ cart, onClearCart }) {
+function Checkout({ cart, onOrderComplete }) {
   const [address, setAddress] = useState({
     fullName: "",
     street: "",
@@ -11,7 +11,7 @@ function Checkout({ cart, onClearCart }) {
     phone: "",
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderTotal, setOrderTotal] = useState(0);
+  const [paidTotal, setPaidTotal] = useState(0);
   const navigate = useNavigate();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -22,9 +22,9 @@ function Checkout({ cart, onClearCart }) {
 
   function handlePlaceOrder(e) {
     e.preventDefault();
-    setOrderTotal(total);
+    setPaidTotal(total);
     setOrderPlaced(true);
-    if (onClearCart) onClearCart();
+    onOrderComplete();
   }
 
   if (cart.length === 0 && !orderPlaced) {
@@ -53,7 +53,7 @@ function Checkout({ cart, onClearCart }) {
             {address.phone}
           </div>
 
-          <p className="confirmation-total">₹{orderTotal} paid</p>
+          <p className="confirmation-total">₹{paidTotal} paid</p>
 
           <button onClick={() => navigate("/")} className="btn-primary" style={{ width: "auto", padding: "11px 28px" }}>
             Continue shopping

@@ -36,7 +36,7 @@ function Login({ onLogin }) {
   return (
     <div className="auth-shell">
       <div className="auth-panel">
-        <p className="auth-panel-eyebrow">Amazon Clone</p>
+        <p className="auth-panel-eyebrow">NovaBuy</p>
         <h1>Welcome back. Your cart missed you.</h1>
         <p>
           Log in to pick up where you left off and keep checkout quick.
